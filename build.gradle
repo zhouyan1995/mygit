@@ -1,0 +1,75 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+
+group 'com.nndims.disaster.product'
+version = '1.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+[compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+		maven { url "http://203.207.224.103:18180/nexus/content/groups/public/" }
+		maven {url 'http://central.maven.org/maven2'}
+		maven {url 'https://repo.spring.io/libs-release'}
+		maven { url "http://repo.maven.apache.org/maven2" }
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath(
+			"org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE",
+			"org.hidetake:gradle-ssh-plugin:2.2.0"
+		)
+	}
+}
+
+repositories {
+	mavenLocal()
+	maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+	maven { url "http://203.207.224.103:18180/nexus/content/groups/public/" }
+	maven {url 'http://central.maven.org/maven2'}
+	maven {url 'https://repo.spring.io/libs-release'}
+	maven {url 'https://repo.spring.io/snapshot'}
+	maven { url "http://repo.maven.apache.org/maven2" }
+	mavenCentral()
+	jcenter()
+}
+
+ext {
+	springBootVersion = '1.5.10.RELEASE'
+	springVersion = '4.3.7.RELEASE'
+	slf4jVersion = '1.7.25'
+	log4jVersion = '1.2.17'
+	fasterxmlVersion = '2.8.4'
+	dozerVersion = '5.5.1'
+	dbcpVersion = '2.1.1'
+	mysqlVersion = '5.1.30'
+	mybatisVersion = '1.3.2'
+	oracleVersion = '11.2'
+}
+	
+dependencies {
+	compile (
+		"org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+//		"org.springframework.boot:spring-boot-configuration-processor:$springBootVersion",
+//		"org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion",
+//		"org.springframework.boot:spring-boot-starter-aop:$springBootVersion",
+		"org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisVersion",
+		"com.fasterxml.jackson.core:jackson-annotations:$fasterxmlVersion",
+		"com.fasterxml.jackson.core:jackson-core:$fasterxmlVersion",
+		"com.fasterxml.jackson.core:jackson-databind:$fasterxmlVersion",
+		"org.slf4j:slf4j-api:$slf4jVersion",
+		"log4j:log4j:$log4jVersion",
+		"com.oracle:ojdbc6:$oracleVersion",
+	    "mysql:mysql-connector-java:$mysqlVersion",
+		"org.apache.commons:commons-dbcp2:$dbcpVersion",
+		"com.alibaba:druid-spring-boot-starter:1.1.10",
+	)
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net  
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<!-- 报表数据转换统计结果 -->
+	<mapping wildcard="false" date-format="yyyy-MM-dd HH:mm:ss" map-id="push_DisasterEntity_DisasterInfoDto">
+		<class-a>com.fineway.disaster.model.entity.d.DisasterEntity</class-a>
+		<class-b>com.fineway.disaster.model.dto.DisasterInfoDto</class-b>
+		<field>
+			<a>disasterId</a>
+			<b>disasterid</b>
+		</field>
+		<field>
+			<a>disasterKind.disasterKindName</a>
+			<b>type</b>
+		</field>
+		<field>
+			<a>disasterKind.disasterKindName</a>
+			<b>name</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.CreditionRelationConverter">
+			<a>creditionRelation</a>
+			<b>addr</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.DisasterStartTimeConverter">
+			<a>disasterStartTime</a>
+			<b>happentime</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.ProvinceConverter">
+			<a>creditionRelation</a>
+			<b>province</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.PlaceConverter">
+			<a>creditionRelation</a>
+			<b>place</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.CountyConverter">
+			<a>creditionRelation</a>
+			<b>county</b>
+		</field>
+		<field>
+			<a>disasterKind.disasterKindId</a>
+			<b>disasterKindId</b>
+		</field>
+		<field>
+			<a>disasterKind.disasterKindName</a>
+			<b>disasterKindName</b>
+		</field>
+		<field>
+			<a>disasterState.disasterStateNumber</a>
+			<b>disasterState</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.DisasterStartTimeConverter">
+			<a>disasterStartTime</a>
+			<b>disasterstarttime</b>
+		</field>
+		<field custom-converter="com.fineway.disaster.utils.DisasterEndTimeConverter">
+			<a>disasterEndTime</a>
+			<b>disasterendtime</b>
+		</field>
+		<field>
+			<a>creditionRelation.civilRegionalism.civilRegionalismCode</a>
+			<b>regionalismcode</b>
+		</field>
+		<field>
+			<a>creditionRelation.civilRegionalism.civilRegionalismName</a>
+			<b>regionalismname</b>
+		</field>
+	</mapping>
+</mappings>

@@ -1,0 +1,57 @@
+
+#### server ####
+server:
+  port: 19003
+  contextPath: /reporter-product
+  
+#### logs ####
+logging:
+  level:
+    org.springframework: info
+    com.nndims.disaster.product: debug
+    
+#### datasource ####
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@192.168.10.11:1521:orcl
+    username: disasterTest
+    password: disasterTest
+    driver-class-name: oracle.jdbc.OracleDriver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    
+#    tomcat:
+#      max-wait: 10000
+#      max-active: 200
+#      validation-query: "SELECT 1"
+#      test-on-borrow: true
+#      initial-size: 1
+
+#### mybatis ####
+mybatis:
+  type-aliases-package: com.nndims.disaster.product.domain
+  mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+#pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  
+  
