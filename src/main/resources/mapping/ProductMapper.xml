@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nndims.disaster.product.mapper.IProductMapper">
+<mapper namespace="com.nndims.disaster.product.mapper.ProductMapper">
 	<resultMap id="BaseResultMap" type="com.nndims.disaster.product.domain.DisasterDto">
 		<id column="disasterId" property="disasterId" jdbcType="VARCHAR" />
 		<result column="disasterName" property="disasterName" jdbcType="VARCHAR" />
@@ -289,5 +289,19 @@
 			group by
 			a.provName,a.indexItemName
 			
+	</select>
+	<!-- 查询指标项 -->
+	<select id="getIndex" resultType="map">
+	select
+ 	t02.indexitemname as PNAME, t01.indexitemname as NAME, t01.indexitemcode, t01.indexitemunit
+	from
+ 	indexitem t01
+	left outer join indexitem t02 on
+	t01.PARENTID = t02.indexitemid
+	where
+ 	t02.indexitemid in ( '402880b1388e4f8501388e4f85d0000a',
+ 	'402880b1388e4f8501388e4f85cf0000',
+ 	'402880b1388e4f8501388e4f85d10013',
+ 	'402880b1388e4f8501388e4f85da002b' )
 	</select>
 </mapper>
