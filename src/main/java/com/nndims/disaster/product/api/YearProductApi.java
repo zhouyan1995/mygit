@@ -4,6 +4,7 @@
 package com.nndims.disaster.product.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import com.nndims.disaster.product.service.IYearProductService;
  */
 @RestController
 @RequestMapping("/api/year")
+@CrossOrigin
 public class YearProductApi extends ProductApi implements IYearProductApi {
 
 	@Autowired
@@ -51,4 +53,12 @@ public class YearProductApi extends ProductApi implements IYearProductApi {
 	// }
 	// }
 
+	
+	public static void main(String[] args) {
+		java.util.Calendar c = java.util.Calendar.getInstance();
+		c.set(2018, 11, 1);
+		System.out.println(c.getTime().getTime());
+		
+	}
+	
 }

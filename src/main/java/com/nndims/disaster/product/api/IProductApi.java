@@ -4,7 +4,10 @@
 package com.nndims.disaster.product.api;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -67,7 +70,7 @@ abstract public interface IProductApi extends IBaseApi {
 	 * @return
 	 */
 	@PostMapping(value = { "/v0.1/export/async" }, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	abstract public Result asyncExportProduct(ExportProductParams params, BindingResult result);
+	abstract public Map<String,Object> asyncExportProduct(ExportProductParams params, BindingResult result,HttpServletRequest req, HttpServletResponse resp);
 
 	/**
 	 * 同步导出本年以来灾情数据
@@ -89,6 +92,55 @@ abstract public interface IProductApi extends IBaseApi {
 		/** 导出级别粒度:1省级、2市级、3县级、4乡镇 **/
 		@NotNull(message = "{level.null}")
 		private Integer level = 1;
+		@NotNull(message = "{starttime.null}")
+		private String starttime;//起止日期
+		
+		private String endtime;////结束日期
+		@NotNull(message = "{flag.null}")
+		private Integer flag;//1 今年以来 0 本月以来
+		
+		private HttpServletRequest req;
+		private HttpServletResponse resp;
+		
+		public HttpServletRequest getReq() {
+			return req;
+		}
+
+		public void setReq(HttpServletRequest req) {
+			this.req = req;
+		}
+
+		public HttpServletResponse getResp() {
+			return resp;
+		}
+
+		public void setResp(HttpServletResponse resp) {
+			this.resp = resp;
+		}
+
+		public String getStarttime() {
+			return starttime;
+		}
+
+		public void setStarttime(String starttime) {
+			this.starttime = starttime;
+		}
+
+		public String getEndtime() {
+			return endtime;
+		}
+
+		public void setEndtime(String endtime) {
+			this.endtime = endtime;
+		}
+
+		public Integer getFlag() {
+			return flag;
+		}
+
+		public void setFlag(Integer flag) {
+			this.flag = flag;
+		}
 
 		public List<String> getReportIds() {
 			return reportIds;

@@ -4,6 +4,7 @@
 package com.nndims.disaster.product.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import com.nndims.disaster.product.service.IProductService;
  */
 @RestController
 @RequestMapping("/api/month")
+@CrossOrigin
 public class MonthProductApi extends ProductApi implements IMonthProductApi {
 
 	@Autowired

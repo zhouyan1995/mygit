@@ -31,7 +31,7 @@ public class DisasterDto extends ABBaseDto {
 	/** 报表id **/
 	private String reportId;
 	/** 报表上报时间 **/
-	private String reportTime; //
+	private String reportTime; // 
 	/** 报表数量 **/
 	private Integer reportCount;
 	/** 报表类型 **/

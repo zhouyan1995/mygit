@@ -42,7 +42,7 @@
 			ORDER BY
 				t02.disasterstarttime DESC
 	</select>
-	<select id="findReportData" resultMap="BaseResultMap">
+	<select id="findReportData" resultType="map">
 			select
 				t07.disasterName, sum(t01.reportItemValue) as reportItemValue, t05.indexitemid, t05.indexItemName
 				<if test="level == 1">
@@ -133,5 +133,161 @@
 				</if>
 			order by
 				t04.civilregionalismCode
+	</select>
+	
+	
+	<!-- //查询灾害类型 -->
+	<select id="findReportDataType" resultType="map">
+			select
+				t07.disasterName
+			from
+				historyReportItemValue t01
+				left outer join historyreport t02 on t01.reportId = t02.reportId
+				left outer join creditionrelation t03 ON t02.creditionrelationId = t03.creditionrelationId
+				left outer join civilregionalism t04 ON t03.civilregionalismId = t04.civilregionalismId
+				left outer join civilregionalismLevel t08 ON t04.civilregionalismLevelId = t08.civilregionalismLevelId
+			<if test="level == 2">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+			</if>
+			<if test="level == 3">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+			</if>
+			<if test="level == 4">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+				left outer join civilregionalism t003 ON t002.parentId = t003.civilregionalismId
+				left outer join civilregionalismLevel t0031 ON t003.civilregionalismLevelId = t0031.civilregionalismLevelId
+			</if>
+				left outer join indexItem t05 on t01.indexItemId = t05.indexItemId
+				left outer join dataType t06 on t05.dataTypeId = t06.dataTypeId
+				left outer join disaster t07 on t02.disasterId = t07.disasterId
+			where
+				t06.dataTypeName = #{dataType}
+				<choose>
+		            <when test="level == 1">
+						and t02.reportId in 
+		            </when>
+		            <otherwise>
+						and t02.belongReportId in 
+		            </otherwise>
+		        </choose>
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						#{id}
+					</foreach>
+				and t05.indexItemCode in 
+					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
+						#{code}
+					</foreach>
+				and t08.civilregionalismLevelNumber in 
+					<foreach collection="levels" index="index" item="level" open="(" separator="," close=")">
+						#{level}
+					</foreach>
+			group by
+				 t07.disasterName
+	</select>
+	<!-- 查询总的 -->
+	<select id="findAllReportData" resultType="map">
+			select sum(a.reportItemValue) as reportItemValue ,a.provName,a.indexItemName
+			from(
+			select
+				 sum(t01.reportItemValue) as reportItemValue, t05.indexitemid, t05.indexItemName
+				<if test="level == 1">
+					,t04.civilregionalismName as provName, t04.civilregionalismCode as provCode
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismName as cityName, t04.civilregionalismCode as cityCode, 
+					t001.civilregionalismName as provName, t001.civilregionalismCode as provCode
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismName as countyName, t04.civilregionalismCode as countyCode, 
+					t001.civilregionalismName as cityName, t001.civilregionalismCode as cityCode,
+					t002.civilregionalismName as provName, t002.civilregionalismCode as provCode
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismName as townName, t04.civilregionalismCode as townCode, 
+					t001.civilregionalismName as countyName, t001.civilregionalismCode as countyCode,
+					t002.civilregionalismName as cityName, t002.civilregionalismCode as cityCode,
+					t003.civilregionalismName as provName, t003.civilregionalismCode as provCode
+				</if>
+			from
+				historyReportItemValue t01
+				left outer join historyreport t02 on t01.reportId = t02.reportId
+				left outer join creditionrelation t03 ON t02.creditionrelationId = t03.creditionrelationId
+				left outer join civilregionalism t04 ON t03.civilregionalismId = t04.civilregionalismId
+				left outer join civilregionalismLevel t08 ON t04.civilregionalismLevelId = t08.civilregionalismLevelId
+			<if test="level == 2">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+			</if>
+			<if test="level == 3">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+			</if>
+			<if test="level == 4">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+				left outer join civilregionalism t003 ON t002.parentId = t003.civilregionalismId
+				left outer join civilregionalismLevel t0031 ON t003.civilregionalismLevelId = t0031.civilregionalismLevelId
+			</if>
+				left outer join indexItem t05 on t01.indexItemId = t05.indexItemId
+				left outer join dataType t06 on t05.dataTypeId = t06.dataTypeId
+				left outer join disaster t07 on t02.disasterId = t07.disasterId
+			where
+				t06.dataTypeName = #{dataType}
+				<choose>
+		            <when test="level == 1">
+						and t02.reportId in 
+		            </when>
+		            <otherwise>
+						and t02.belongReportId in 
+		            </otherwise>
+		        </choose>
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						#{id}
+					</foreach>
+				and t05.indexItemCode in 
+					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
+						#{code}
+					</foreach>
+				and t08.civilregionalismLevelNumber in 
+					<foreach collection="levels" index="index" item="level" open="(" separator="," close=")">
+						#{level}
+					</foreach>
+			group by
+				t05.indexItemId, t05.indexItemName
+				<if test="level == 1">
+					,t04.civilregionalismCode, t04.civilregionalismName
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName, 
+					t003.civilregionalismCode, t003.civilregionalismName
+				</if>
+			order by
+				t04.civilregionalismCode
+			) a
+			group by
+			a.provName,a.indexItemName
+			
 	</select>
 </mapper>

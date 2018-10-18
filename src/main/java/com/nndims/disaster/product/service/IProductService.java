@@ -4,6 +4,10 @@
 package com.nndims.disaster.product.service;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +24,16 @@ abstract public interface IProductService extends IBaseService {
 
 	abstract public List<DisasterDto> findDisasterList(Long stime, Long etime);
 
-	abstract public void findReportData(List<String> reportIds, List<String> indexItemCodes, Integer level);
+	abstract public List<Map<String, Object>> findReportData(
+			List<String> reportIds, List<String> indexItemCodes, Integer level,
+			Integer flag, String startTime, String endtime,HttpServletRequest req, HttpServletResponse resp);
 
-	abstract public void asyncExportProduct(List<String> reportIds, List<String> indexItemCodes, Integer level);
+	abstract public List<Map<String, Object>> asyncExportProduct(List<String> reportIds,
+			List<String> indexItemCodes, Integer level, Integer flag,
+			String starttime, String endtime,HttpServletRequest req, HttpServletResponse resp);
 
-	abstract public void syncExportProduct(List<String> reportIds, List<String> indexItemCodes, Integer level);
+	abstract public void syncExportProduct(List<String> reportIds,
+			List<String> indexItemCodes, Integer level, Integer flag,
+			String starttime, String endtime,HttpServletRequest req, HttpServletResponse resp);
 
 }
