@@ -130,6 +130,11 @@ public class productController {
 		Map<String,Object> map1 =new HashMap();
 		try {
 			list = service.getProName();
+			for(int i=0;i<list.size();i++){
+				if(list.get(i).get("CIVILREGIONALISMNAME").equals("测试省")){
+					list.remove(i);
+				}
+			}
 			map.put("result", "success");
 			/*map1.put("CIVILREGIONALISMNAME", "全国");
 			map1.put("CREDITIONRELATIONID", "ALL_SELECT");

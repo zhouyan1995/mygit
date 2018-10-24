@@ -296,6 +296,8 @@ public class ProductServiceImpl implements ProductServie {
 								
 							}
 							HSSFCell cell3_1 = row3.createCell(0); //第一列
+							
+							
 							cell3_1.setCellValue("地区");
 							cell3_1.setCellStyle(cellStyle6); //居中 边框
 							sheet.addMergedRegion(//合并
@@ -360,9 +362,15 @@ public class ProductServiceImpl implements ProductServie {
 							int sz1=0;
 							int nz1=0;
 							int e1=0;
-							for(int x =3 ;x<5;x++){
+							/*HSSFRow	 row4_0 = sheet.createRow(3); //地区
+							HSSFCell cell4_0 = row4_0.createCell(0);
+							HSSFRow	 row5_0 = sheet.createRow(4);
+							HSSFCell cell5_0 = row5_0.createCell(0);
+							cell4_0.setCellStyle(cellStyle); //居中 边框
+							cell5_0.setCellStyle(cellStyle); //居中 边框
+*/							for(int x =3 ;x<5;x++){
 								HSSFRow	 row4 = sheet.createRow(x);
-								for(int c =1;c<=indexItemCodes.size();c++){
+								for(int c =0;c<=indexItemCodes.size();c++){
 									HSSFCell cell4_1 = row4.createCell(c); //人口
 									if(x==3){
 										cell4_1.setCellStyle(cellStyle7); //居中 边框

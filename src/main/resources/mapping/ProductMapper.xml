@@ -317,13 +317,14 @@
 	<!-- //查询灾害类型 -->
 	<select id="findReportDataType" resultType="map">
 			select
-				t07.disasterName
+				t07.disasterName,t09.DISASTERKINDORDERNUMBER
 			from
 				historyReportItemValue t01
 				left outer join historyreport t02 on t01.reportId = t02.reportId
 				left outer join creditionrelation t03 ON t02.creditionrelationId = t03.creditionrelationId
 				left outer join civilregionalism t04 ON t03.civilregionalismId = t04.civilregionalismId
 				left outer join civilregionalismLevel t08 ON t04.civilregionalismLevelId = t08.civilregionalismLevelId
+				 
 			<if test="level == 2">
 				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
 				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
@@ -345,6 +346,7 @@
 				left outer join indexItem t05 on t01.indexItemId = t05.indexItemId
 				left outer join dataType t06 on t05.dataTypeId = t06.dataTypeId
 				left outer join disaster t07 on t02.disasterId = t07.disasterId
+				left outer join disasterkind t09 on t09.disasterkindId = t07.disasterkindId 
 			where
 				t06.dataTypeName = #{dataType}
 				<choose>
@@ -380,9 +382,9 @@
 						#{level}
 					</foreach>
 			group by
-				 t07.disasterName
+				 t07.disasterName,t09.DISASTERKINDORDERNUMBER
 			order by 
-				t07.disasterName
+				t09.DISASTERKINDORDERNUMBER
 	</select>
 	<!-- 查询总的 -->
 	<select id="findAllReportData" resultType="map">
