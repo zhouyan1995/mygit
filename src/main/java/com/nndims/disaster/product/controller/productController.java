@@ -131,7 +131,7 @@ public class productController {
 		try {
 			list = service.getProName();
 			for(int i=0;i<list.size();i++){
-				if(list.get(i).get("CIVILREGIONALISMNAME").equals("测试省")){
+				if(list.get(i).get("CIVILREGIONALISMNAME").toString().contains("测试")){
 					list.remove(i);
 				}
 			}
