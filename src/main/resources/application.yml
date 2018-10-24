@@ -2,7 +2,7 @@
 #### server ####
 server:
   port: 19003
-  contextPath: /reporter-product
+  contextPath: /disaster-product
   
 #### logs ####
 logging:

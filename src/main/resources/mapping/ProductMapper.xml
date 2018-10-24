@@ -5,7 +5,22 @@
 		<id column="disasterId" property="disasterId" jdbcType="VARCHAR" />
 		<result column="disasterName" property="disasterName" jdbcType="VARCHAR" />
 	</resultMap>
-	<select id="findDisasterList" resultMap="BaseResultMap">
+	<!-- 查询区划 -->
+	<select id="getProName" resultType="map">
+				select t3.civilregionalismname,t2.creditionrelationId 
+				from civilregionalism t3
+                left join creditionrelation t2 on t2.civilregionalismId = t3.civilregionalismId 
+                where 
+                t3.CIVILREGIONALISMLEVELID ='2' 
+                and t2.CREDITIONID='3'
+                order by 
+                t3.civilregionalismordernumber
+	</select>
+	<!-- 本年以来 -->
+	<select id="findDisasterListByYear" resultMap="BaseResultMap">
+			select * from(
+				select A.* ,ROWNUM RN 
+			from(
 			SELECT
 				t02.disasterId, t02.disasterName, t02.disasterStartTime, t02.disasterEndTime, t00.reportId,
 				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName
@@ -28,6 +43,7 @@
 				INNER JOIN flowAction t5 ON t0.flowActionId = t5.flowActionId
 				INNER JOIN flowActionStatus t6 ON t5.flowActionStatusId = t6.flowActionStatusId
 				WHERE
+					
 					t1.disasterStartTime <![CDATA[>=]]> #{stime}
 					AND t1.disasterStartTime <![CDATA[<=]]> #{etime}
 					AND t1.disasterValidity = #{disasterValidity}
@@ -37,10 +53,160 @@
 						<foreach collection="flowActionStatusCodes" index="index" item="code" open="(" separator="," close=")">
 							#{code}
 						</foreach>
+						AND t2.creditionrelationId IN
+						<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+							#{id}
+						</foreach>
 				GROUP BY
 					t1.disasterid) t01 ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
 			ORDER BY
 				t02.disasterstarttime DESC
+			)  A
+			)
+			where RN BETWEEN #{currentPage} AND #{pageSize}	
+	</select>
+	<!-- 本月以来 -->
+	<select id="findDisasterList" resultMap="BaseResultMap">
+			select * from(
+			select A.* ,ROWNUM RN 
+			from(
+				SELECT
+				t02.disasterId, t02.disasterName, t02.disasterStartTime, t02.disasterEndTime, t00.reportId,
+				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName
+			FROM
+				historyReport t00
+			INNER JOIN disaster t02 ON t00.disasterId = t02.disasterId
+			INNER JOIN actionList t03 ON t00.actionListId = t03.actionListId
+			INNER JOIN reportStage t04 ON t03.reportStageId = t04.reportStageId
+			INNER JOIN flowAction t05 ON t00.flowActionId = t05.flowActionId
+			INNER JOIN flowActionStatus t06 ON t05.flowActionStatusId = t06.flowActionStatusId
+			INNER JOIN (
+				SELECT
+					MAX(t0.reportTime) AS reportTime, t1.disasterId
+				FROM
+					historyReport t0
+				INNER JOIN disaster t1 ON t0.disasterid = t1.disasterid
+				INNER JOIN creditionrelation t2 ON t0.creditionrelationId = t2.creditionrelationId
+				INNER JOIN civilregionalism t3 ON t2.civilregionalismId = t3.civilregionalismId
+				INNER JOIN civilregionalismLevel t4 ON t3.civilregionalismLevelId = t4.civilregionalismLevelId
+				INNER JOIN flowAction t5 ON t0.flowActionId = t5.flowActionId
+				INNER JOIN flowActionStatus t6 ON t5.flowActionStatusId = t6.flowActionStatusId
+				WHERE
+					<!-- ROWNUM <![CDATA[<=]]>  #{currentPage} -->
+					t0.reportTime <![CDATA[>=]]> #{stime}
+					AND t0.reportTime <![CDATA[<=]]> #{etime}
+					AND t1.disasterValidity = #{disasterValidity}
+					AND t1.disasterStateId = #{disasterStateId}
+					AND t4.civilregionalismLevelNumber = #{level}
+					AND t6.flowActionStatusCode IN 
+						<foreach collection="flowActionStatusCodes" index="index" item="code" open="(" separator="," close=")">
+							#{code}
+						</foreach>
+					AND t2.creditionrelationId IN
+						<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+							#{id}
+						</foreach>
+				GROUP BY
+					t1.disasterid ) t01 
+					ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
+			ORDER BY
+				t02.disasterstarttime DESC
+			) A
+			
+			)
+			<!-- where RN <![CDATA[>=]]> #{pageSize} -->
+			where RN BETWEEN #{currentPage} AND #{pageSize}	
+				
+	</select>
+	<!-- 总条数 本月以来 -->
+	<select id="findDisasterListCountByMonth" resultType="int">
+	
+				SELECT
+				count(*)
+			FROM
+				historyReport t00
+			INNER JOIN disaster t02 ON t00.disasterId = t02.disasterId
+			INNER JOIN actionList t03 ON t00.actionListId = t03.actionListId
+			INNER JOIN reportStage t04 ON t03.reportStageId = t04.reportStageId
+			INNER JOIN flowAction t05 ON t00.flowActionId = t05.flowActionId
+			INNER JOIN flowActionStatus t06 ON t05.flowActionStatusId = t06.flowActionStatusId
+			INNER JOIN (
+				SELECT
+					MAX(t0.reportTime) AS reportTime, t1.disasterId
+				FROM
+					historyReport t0
+				INNER JOIN disaster t1 ON t0.disasterid = t1.disasterid
+				INNER JOIN creditionrelation t2 ON t0.creditionrelationId = t2.creditionrelationId
+				INNER JOIN civilregionalism t3 ON t2.civilregionalismId = t3.civilregionalismId
+				INNER JOIN civilregionalismLevel t4 ON t3.civilregionalismLevelId = t4.civilregionalismLevelId
+				INNER JOIN flowAction t5 ON t0.flowActionId = t5.flowActionId
+				INNER JOIN flowActionStatus t6 ON t5.flowActionStatusId = t6.flowActionStatusId
+				WHERE
+					<!-- ROWNUM <![CDATA[<=]]>  #{currentPage} -->
+					t0.reportTime <![CDATA[>=]]> #{stime}
+					AND t0.reportTime <![CDATA[<=]]> #{etime}
+					AND t1.disasterValidity = #{disasterValidity}
+					AND t1.disasterStateId = #{disasterStateId}
+					AND t4.civilregionalismLevelNumber = #{level}
+					AND t6.flowActionStatusCode IN 
+						<foreach collection="flowActionStatusCodes" index="index" item="code" open="(" separator="," close=")">
+							#{code}
+						</foreach>
+					AND t2.creditionrelationId IN
+						<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+							#{id}
+						</foreach>
+				GROUP BY
+					t1.disasterid ) t01 
+					ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
+			ORDER BY
+				t02.disasterstarttime DESC
+			
+	</select>
+	<!-- 总条数 本年以来 -->
+	<select id="findDisasterListCountByYear" resultType="int">
+	
+				SELECT
+				count(*)
+			FROM
+				historyReport t00
+			INNER JOIN disaster t02 ON t00.disasterId = t02.disasterId
+			INNER JOIN actionList t03 ON t00.actionListId = t03.actionListId
+			INNER JOIN reportStage t04 ON t03.reportStageId = t04.reportStageId
+			INNER JOIN flowAction t05 ON t00.flowActionId = t05.flowActionId
+			INNER JOIN flowActionStatus t06 ON t05.flowActionStatusId = t06.flowActionStatusId
+			INNER JOIN (
+				SELECT
+					MAX(t0.reportTime) AS reportTime, t1.disasterId
+				FROM
+					historyReport t0
+				INNER JOIN disaster t1 ON t0.disasterid = t1.disasterid
+				INNER JOIN creditionrelation t2 ON t0.creditionrelationId = t2.creditionrelationId
+				INNER JOIN civilregionalism t3 ON t2.civilregionalismId = t3.civilregionalismId
+				INNER JOIN civilregionalismLevel t4 ON t3.civilregionalismLevelId = t4.civilregionalismLevelId
+				INNER JOIN flowAction t5 ON t0.flowActionId = t5.flowActionId
+				INNER JOIN flowActionStatus t6 ON t5.flowActionStatusId = t6.flowActionStatusId
+				WHERE
+					<!-- ROWNUM <![CDATA[<=]]>  #{currentPage} -->
+					t1.disasterStartTime <![CDATA[>=]]> #{stime}
+					AND t1.disasterStartTime <![CDATA[<=]]> #{etime}
+					AND t1.disasterValidity = #{disasterValidity}
+					AND t1.disasterStateId = #{disasterStateId}
+					AND t4.civilregionalismLevelNumber = #{level}
+					AND t6.flowActionStatusCode IN 
+						<foreach collection="flowActionStatusCodes" index="index" item="code" open="(" separator="," close=")">
+							#{code}
+						</foreach>
+					AND t2.creditionrelationId IN
+						<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+							#{id}
+						</foreach>
+				GROUP BY
+					t1.disasterid ) t01 
+					ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
+			ORDER BY
+				t02.disasterstarttime DESC
+			
 	</select>
 	<select id="findReportData" resultType="map">
 			select
@@ -101,8 +267,20 @@
 		            </otherwise>
 		        </choose>
 					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
-						#{id}
+						  <if test="(index % 999) == 998"> NULL ) OR 
+						  <choose>
+		            <when test="level == 1">
+						 t02.reportId in 
+		            </when>
+		            <otherwise>
+					 t02.belongReportId in 
+		            </otherwise>
+		       	 	</choose>
+						  
+					(</if>#{id}
 					</foreach>
+					 
+					
 				and t05.indexItemCode in 
 					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
 						#{code}
@@ -177,8 +355,21 @@
 						and t02.belongReportId in 
 		            </otherwise>
 		        </choose>
-					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+					<!-- <foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
 						#{id}
+					</foreach> -->
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						  <if test="(index % 999) == 998"> NULL ) OR 
+						  <choose>
+		            <when test="level == 1">
+						 t02.reportId in 
+		            </when>
+		            <otherwise>
+					 t02.belongReportId in 
+		            </otherwise>
+		       	 	</choose>
+						  
+					(</if>#{id}
 					</foreach>
 				and t05.indexItemCode in 
 					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
@@ -190,6 +381,8 @@
 					</foreach>
 			group by
 				 t07.disasterName
+			order by 
+				t07.disasterName
 	</select>
 	<!-- 查询总的 -->
 	<select id="findAllReportData" resultType="map">
@@ -252,9 +445,23 @@
 						and t02.belongReportId in 
 		            </otherwise>
 		        </choose>
-					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+					<!-- <foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
 						#{id}
+					</foreach> -->
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						  <if test="(index % 999) == 998"> NULL ) OR 
+						  <choose>
+		            <when test="level == 1">
+						 t02.reportId in 
+		            </when>
+		            <otherwise>
+					 t02.belongReportId in 
+		            </otherwise>
+		       	 	</choose>
+						  
+					(</if>#{id}
 					</foreach>
+					
 				and t05.indexItemCode in 
 					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
 						#{code}
@@ -303,5 +510,230 @@
  	'402880b1388e4f8501388e4f85cf0000',
  	'402880b1388e4f8501388e4f85d10013',
  	'402880b1388e4f8501388e4f85da002b' )
+ 	order by t02.indexitemname desc
+	</select>
+	
+	<!-- 合计sheet页  合计行数值 -->
+	<select id="getAllReportValue" resultType="map">
+			select sum(reportItemValue) as reportItemValue ,indexItemName
+			from(
+			select
+				 sum(t01.reportItemValue) as reportItemValue, t05.indexitemid, t05.indexItemName
+				<if test="level == 1">
+					,t04.civilregionalismName as provName, t04.civilregionalismCode as provCode
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismName as cityName, t04.civilregionalismCode as cityCode, 
+					t001.civilregionalismName as provName, t001.civilregionalismCode as provCode
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismName as countyName, t04.civilregionalismCode as countyCode, 
+					t001.civilregionalismName as cityName, t001.civilregionalismCode as cityCode,
+					t002.civilregionalismName as provName, t002.civilregionalismCode as provCode
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismName as townName, t04.civilregionalismCode as townCode, 
+					t001.civilregionalismName as countyName, t001.civilregionalismCode as countyCode,
+					t002.civilregionalismName as cityName, t002.civilregionalismCode as cityCode,
+					t003.civilregionalismName as provName, t003.civilregionalismCode as provCode
+				</if>
+			from
+				historyReportItemValue t01
+				left outer join historyreport t02 on t01.reportId = t02.reportId
+				left outer join creditionrelation t03 ON t02.creditionrelationId = t03.creditionrelationId
+				left outer join civilregionalism t04 ON t03.civilregionalismId = t04.civilregionalismId
+				left outer join civilregionalismLevel t08 ON t04.civilregionalismLevelId = t08.civilregionalismLevelId
+			<if test="level == 2">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+			</if>
+			<if test="level == 3">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+			</if>
+			<if test="level == 4">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+				left outer join civilregionalism t003 ON t002.parentId = t003.civilregionalismId
+				left outer join civilregionalismLevel t0031 ON t003.civilregionalismLevelId = t0031.civilregionalismLevelId
+			</if>
+				left outer join indexItem t05 on t01.indexItemId = t05.indexItemId
+				left outer join dataType t06 on t05.dataTypeId = t06.dataTypeId
+				left outer join disaster t07 on t02.disasterId = t07.disasterId
+			where
+				t06.dataTypeName = #{dataType}
+				<choose>
+		            <when test="level == 1">
+						and t02.reportId in 
+		            </when>
+		            <otherwise>
+						and t02.belongReportId in 
+		            </otherwise>
+		        </choose>
+					<!-- <foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						#{id}
+					</foreach> -->
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						  <if test="(index % 999) == 998"> NULL ) OR 
+						  <choose>
+		            <when test="level == 1">
+						 t02.reportId in 
+		            </when>
+		            <otherwise>
+					 t02.belongReportId in 
+		            </otherwise>
+		       	 	</choose>
+						  
+					(</if>#{id}
+					</foreach>
+					
+				and t05.indexItemCode in 
+					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
+						#{code}
+					</foreach>
+				and t08.civilregionalismLevelNumber in 
+					<foreach collection="levels" index="index" item="level" open="(" separator="," close=")">
+						#{level}
+					</foreach>
+			group by
+				t05.indexItemId, t05.indexItemName
+				<if test="level == 1">
+					,t04.civilregionalismCode, t04.civilregionalismName
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName, 
+					t003.civilregionalismCode, t003.civilregionalismName
+				</if>
+			order by
+				t04.civilregionalismCode
+			) a
+			group by
+			indexItemName
+			
+	</select>
+	
+	<!-- 分省合计的值 -->
+	<select id="findReportDataValue" resultType="map">
+			 select  sum(reportItemValue) as reportItemValue ,disasterName ,indexItemName from(
+			 select
+				t07.disasterName, sum(t01.reportItemValue) as reportItemValue, t05.indexitemid, t05.indexItemName
+				<if test="level == 1">
+					,t04.civilregionalismName as provName, t04.civilregionalismCode as provCode
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismName as cityName, t04.civilregionalismCode as cityCode, 
+					t001.civilregionalismName as provName, t001.civilregionalismCode as provCode
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismName as countyName, t04.civilregionalismCode as countyCode, 
+					t001.civilregionalismName as cityName, t001.civilregionalismCode as cityCode,
+					t002.civilregionalismName as provName, t002.civilregionalismCode as provCode
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismName as townName, t04.civilregionalismCode as townCode, 
+					t001.civilregionalismName as countyName, t001.civilregionalismCode as countyCode,
+					t002.civilregionalismName as cityName, t002.civilregionalismCode as cityCode,
+					t003.civilregionalismName as provName, t003.civilregionalismCode as provCode
+				</if>
+			from
+				historyReportItemValue t01
+				left outer join historyreport t02 on t01.reportId = t02.reportId
+				left outer join creditionrelation t03 ON t02.creditionrelationId = t03.creditionrelationId
+				left outer join civilregionalism t04 ON t03.civilregionalismId = t04.civilregionalismId
+				left outer join civilregionalismLevel t08 ON t04.civilregionalismLevelId = t08.civilregionalismLevelId
+			<if test="level == 2">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+			</if>
+			<if test="level == 3">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+			</if>
+			<if test="level == 4">
+				left outer join civilregionalism t001 ON t04.parentId = t001.civilregionalismId
+				left outer join civilregionalismLevel t0011 ON t001.civilregionalismLevelId = t0011.civilregionalismLevelId
+				left outer join civilregionalism t002 ON t001.parentId = t002.civilregionalismId
+				left outer join civilregionalismLevel t0021 ON t002.civilregionalismLevelId = t0021.civilregionalismLevelId
+				left outer join civilregionalism t003 ON t002.parentId = t003.civilregionalismId
+				left outer join civilregionalismLevel t0031 ON t003.civilregionalismLevelId = t0031.civilregionalismLevelId
+			</if>
+				left outer join indexItem t05 on t01.indexItemId = t05.indexItemId
+				left outer join dataType t06 on t05.dataTypeId = t06.dataTypeId
+				left outer join disaster t07 on t02.disasterId = t07.disasterId
+			where
+				t06.dataTypeName = #{dataType}
+				<choose>
+		            <when test="level == 1">
+						and t02.reportId in 
+		            </when>
+		            <otherwise>
+						and t02.belongReportId in 
+		            </otherwise>
+		        </choose>
+					<foreach collection="reportIds" index="index" item="id" open="(" separator="," close=")">
+						  <if test="(index % 999) == 998"> NULL ) OR 
+						  <choose>
+		            <when test="level == 1">
+						 t02.reportId in 
+		            </when>
+		            <otherwise>
+					 t02.belongReportId in 
+		            </otherwise>
+		       	 	</choose>
+						  
+					(</if>#{id}
+					</foreach>
+					 
+					
+				and t05.indexItemCode in 
+					<foreach collection="indexItemCodes" index="index" item="code" open="(" separator="," close=")">
+						#{code}
+					</foreach>
+				and t08.civilregionalismLevelNumber in 
+					<foreach collection="levels" index="index" item="level" open="(" separator="," close=")">
+						#{level}
+					</foreach>
+			group by
+				t05.indexItemId, t05.indexItemName, t07.disasterName
+				<if test="level == 1">
+					,t04.civilregionalismCode, t04.civilregionalismName
+				</if>
+				<if test="level == 2">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName
+				</if>
+				<if test="level == 3">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName
+				</if>
+				<if test="level == 4">
+					,t04.civilregionalismCode, t04.civilregionalismName,
+					t001.civilregionalismCode, t001.civilregionalismName, 
+					t002.civilregionalismCode, t002.civilregionalismName, 
+					t003.civilregionalismCode, t003.civilregionalismName
+				</if>
+			order by
+				t04.civilregionalismCode
+			 ) group by disasterName,indexItemName
+			
+			
 	</select>
 </mapper>

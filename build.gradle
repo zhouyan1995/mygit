@@ -71,5 +71,6 @@ dependencies {
 	    "mysql:mysql-connector-java:$mysqlVersion",
 		"org.apache.commons:commons-dbcp2:$dbcpVersion",
 		"com.alibaba:druid-spring-boot-starter:1.1.10",
+		"org.apache.poi:poi:3.15",
 	)
 }
