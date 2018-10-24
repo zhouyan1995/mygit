@@ -90,20 +90,20 @@ public class productController {
 	Long stime1=Long.parseLong(stime);
 	Long etime1=Long.parseLong(etime);
 	Integer flag =Params.getFlag();
-	Integer currentPage =Params.getCurrentPage();
-	Integer pageSize =Params.getPageSize();
+	/*Integer currentPage =Params.getCurrentPage();
+	Integer pageSize =Params.getPageSize();*/
 	int count =0;
 	try {
 		if(flag ==0){//本月以来
 			list = service.findDisasterList(stime1,
 					etime1,
-					( currentPage-1)*pageSize+1 ,currentPage*pageSize,
+					 null ,null,
 					Params.getIds());
-			 count =service.findDisasterListCountByMonth(stime1, etime1, currentPage, pageSize, Params.getIds());
+			 count =service.findDisasterListCountByMonth(stime1, etime1, null, null, Params.getIds());
 			
 		}else{ //本年以来
-			list = service.findDisasterListByYear(stime1, etime1,( currentPage-1)*pageSize+1 ,currentPage*pageSize,Params.getIds());
-			 count =service.findDisasterListCountByYear(stime1, etime1, currentPage, pageSize, Params.getIds());
+			list = service.findDisasterListByYear(stime1, etime1,null ,null,Params.getIds());
+			 count =service.findDisasterListCountByYear(stime1, etime1, null, null, Params.getIds());
 		}
 		if(list == null){
 			map.put("result", "没有数据");

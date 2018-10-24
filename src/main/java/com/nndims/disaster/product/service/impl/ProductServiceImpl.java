@@ -310,6 +310,7 @@ public class ProductServiceImpl implements ProductServie {
 							HSSFCell cell3_2 = row3.createCell(1); //第二列
 							cell3_2.setCellValue("受灾人口情况");
 							cell3_2.setCellStyle(cellStyle6); //居中 边框
+							if(sz!=1){
 							sheet.addMergedRegion(//合并 人口受灾情况
 									new CellRangeAddress(
 											2, //起始行
@@ -318,12 +319,13 @@ public class ProductServiceImpl implements ProductServie {
 											sz//结束行
 											)
 									
-										);
+										);}
 							//设置边框
 							
 							HSSFCell cell3_n = row3.createCell(sz+1); //第n列
 							cell3_n.setCellValue("农作物受灾情况");
 							cell3_n.setCellStyle(cellStyle6); //居中 边框
+							if(nz>1){
 							sheet.addMergedRegion(//合并 农作物受灾情况
 									new CellRangeAddress(
 											2, //起始行
@@ -332,11 +334,12 @@ public class ProductServiceImpl implements ProductServie {
 											sz+nz//结束行
 											)
 									
-										);
+										);}
 							//设置边框
 							HSSFCell cell3_n_1 = row3.createCell(sz+nz+1); //第n列
 							cell3_n_1.setCellValue("损失情况");
 							cell3_n_1.setCellStyle(cellStyle6); //居中 边框
+							if(sz+nz+1<indexItemCodes.size()){
 							sheet.addMergedRegion(//合并 农作物受灾情况
 									new CellRangeAddress(
 											2, //起始行
@@ -345,7 +348,7 @@ public class ProductServiceImpl implements ProductServie {
 											indexItemCodes.size()//结束行
 											)
 									
-										);
+										);}
 							//设置边框
 							HSSFRow	 row40 = sheet.createRow(39);//创建sheet的第40行
 							HSSFCell cell401 = row40.createCell(0); 

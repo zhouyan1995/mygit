@@ -18,12 +18,12 @@
 	</select>
 	<!-- 本年以来 -->
 	<select id="findDisasterListByYear" resultMap="BaseResultMap">
-			select * from(
+			<!-- select * from(
 				select A.* ,ROWNUM RN 
-			from(
+			from( -->
 			SELECT
 				t02.disasterId, t02.disasterName, t02.disasterStartTime, t02.disasterEndTime, t00.reportId,
-				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName
+				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName,t01.civilregionalismname
 			FROM
 				historyReport t00
 			INNER JOIN disaster t02 ON t00.disasterId = t02.disasterId
@@ -33,7 +33,7 @@
 			INNER JOIN flowActionStatus t06 ON t05.flowActionStatusId = t06.flowActionStatusId
 			INNER JOIN (
 				SELECT
-					MAX(t0.reportTime) AS reportTime, t1.disasterId
+					MAX(t0.reportTime) AS reportTime, t1.disasterId,t3.civilregionalismname
 				FROM
 					historyReport t0
 				INNER JOIN disaster t1 ON t0.disasterid = t1.disasterid
@@ -58,21 +58,22 @@
 							#{id}
 						</foreach>
 				GROUP BY
-					t1.disasterid) t01 ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
+					t1.disasterid,t3.civilregionalismname) t01 ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
 			ORDER BY
+				
 				t02.disasterstarttime DESC
-			)  A
+			<!-- )  A
 			)
-			where RN BETWEEN #{currentPage} AND #{pageSize}	
+			where RN BETWEEN #{currentPage} AND #{pageSize} -->	
 	</select>
 	<!-- 本月以来 -->
 	<select id="findDisasterList" resultMap="BaseResultMap">
-			select * from(
+			<!-- select * from(
 			select A.* ,ROWNUM RN 
-			from(
+			from( -->
 				SELECT
 				t02.disasterId, t02.disasterName, t02.disasterStartTime, t02.disasterEndTime, t00.reportId,
-				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName
+				t00.reportTime, t00.reportCount, t04.reportStageName, t06.flowActionStatusName,t01.civilregionalismname
 			FROM
 				historyReport t00
 			INNER JOIN disaster t02 ON t00.disasterId = t02.disasterId
@@ -82,7 +83,7 @@
 			INNER JOIN flowActionStatus t06 ON t05.flowActionStatusId = t06.flowActionStatusId
 			INNER JOIN (
 				SELECT
-					MAX(t0.reportTime) AS reportTime, t1.disasterId
+					MAX(t0.reportTime) AS reportTime, t1.disasterId,t3.civilregionalismname
 				FROM
 					historyReport t0
 				INNER JOIN disaster t1 ON t0.disasterid = t1.disasterid
@@ -107,15 +108,14 @@
 							#{id}
 						</foreach>
 				GROUP BY
-					t1.disasterid ) t01 
+					t1.disasterid, t3.civilregionalismname) t01 
 					ON t00.reporttime = t01.reporttime AND t00.disasterid = t01.disasterid
 			ORDER BY
 				t02.disasterstarttime DESC
-			) A
+			<!-- ) A
 			
 			)
-			<!-- where RN <![CDATA[>=]]> #{pageSize} -->
-			where RN BETWEEN #{currentPage} AND #{pageSize}	
+			where RN BETWEEN #{currentPage} AND #{pageSize}	 -->
 				
 	</select>
 	<!-- 总条数 本月以来 -->

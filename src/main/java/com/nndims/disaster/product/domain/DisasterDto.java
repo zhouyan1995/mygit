@@ -38,6 +38,15 @@ public class DisasterDto extends ABBaseDto {
 	private String reportStageName;
 	/****/
 	private String flowActionStatusName;
+	
+	private String civilregionalismname;
+	public String getCivilregionalismname() {
+		return civilregionalismname;
+	}
+
+	public void setCivilregionalismname(String civilregionalismname) {
+		this.civilregionalismname = civilregionalismname;
+	}
 
 	public String getDisasterId() {
 		return disasterId;
