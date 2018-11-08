@@ -1,0 +1,12 @@
+*.project
+*.classpath
+*.settings/
+.gradle/
+*build/
+*bin/
+*target
+*gradle.properties
+*.iml
+*.tern-project
+*.myumldata
+*.idea

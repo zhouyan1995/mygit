@@ -1,0 +1,31 @@
+#### server ####
+server:
+  port: 19003
+  contextPath: /testBoot
+
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.10.12:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: yanfa
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    maxActive: 20 #最大连接池数量
+    initialSize: 1 #初始化连接数
+    maxWait: 60000 #获取连接最大等待时间
+    minIdle: 1 #最小连接池数量
+    timeBetweenEvictionRunsMillis: 60000 #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x' # 验证连接有效与否的SQL，不同的数据配置不同
+    filters: stat,wall,log4j  # 配置监控统计拦截的filters,去掉后，监控界面的sql无法统计
+    testWhileIdle: true #为true才会检测
+    testOnBorrow: true #这里建议配置为TRUE，防止取到的连接不可用
+    testOnReturn: false
+    poolPreparedStatements: true #打开PSCache，并且指定每个连接上PSCache的大小
+    maxOpenPreparedStatements: 20
+
+mybatis:
+  typeAliasesPackage: com.test.model
+  mapper-locations: classpath*:mapper/*.xml
+#:后面要空一格
+
