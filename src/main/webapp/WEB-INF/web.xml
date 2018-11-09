@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5" id="WebApp_1541661054250">
   <display-name>TestBoot</display-name>
   <!-- 设置utf-8 防止乱码 -->
 <filter>
@@ -47,4 +47,14 @@
   <filter-name>druidWebStatFilter</filter-name> 
   <url-pattern>/*</url-pattern> 
  </filter-mapping>
+ 
+  <!-- 浏览器不支持put,delete等method,由该filter将/xxx?_method=delete转换为标准的http delete方法 -->
+     <filter>
+         <filter-name>hiddenHttpMethodFilter</filter-name>
+         <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+     </filter>
+     <filter-mapping>
+         <filter-name>hiddenHttpMethodFilter</filter-name>
+         <url-pattern>/*</url-pattern>
+    </filter-mapping>
  </web-app>

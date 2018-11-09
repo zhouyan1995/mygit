@@ -2,13 +2,22 @@ package com.test.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+@Entity
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+	@Id
+	@GeneratedValue
 	private String id;
 	private String username;
-	private String pasword;
+	@Column(nullable = false, length = 3)
+	private String password;
 	public String getId() {
 		return id;
 	}
@@ -22,16 +31,21 @@ public class User implements Serializable {
 		this.username = username;
 	}
 	public String getPasword() {
-		return pasword;
+		return password;
 	}
-	public void setPasword(String pasword) {
-		this.pasword = pasword;
+	public void setPasword(String password) {
+		this.password = password;
 	}
-	public User(String id, String username, String pasword) {
+	public User(String id, String username, String password) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.pasword = pasword;
+		this.password = password;
+	}
+	public User(String id, String password) {
+		super();
+		this.id = id;
+		this.password = password;
 	}
 	public User() {
 		super();
