@@ -13,57 +13,56 @@ import com.test.model.User;
 import com.test.service.UserService;
 
 @Controller
-@RequestMapping("/User/*")
+@RequestMapping("api/{apiVersion}/user/")
 public class UserController {
 
-	
-	private final Logger log = org.slf4j.LoggerFactory
-			.getLogger(UserController.class);
 
-	@Autowired
-	UserService service;
+        private final Logger log = org.slf4j.LoggerFactory
+                        .getLogger(UserController.class);
 
-	/*Restful风格*/
-	/*get 查询*/
-	@RequestMapping(value="User",method=RequestMethod.GET,produces={"application/json;charset=UTF-8"})
-	@ResponseBody
-	public Object getUser() {
-		List<User> list =service.getUser();
-		return list;
+        @Autowired
+        UserService service;
 
-	}
-	/*put 修改*/
-	@RequestMapping(value="User",method=RequestMethod.PUT,produces={"application/json;charset=UTF-8"})
-	@ResponseBody
-	public Object updateUser(String id ,String username) {
-		User u =new User();
-		u.setId(id);
-		u.setUsername(username);
-		int result =service.updateUser(u);
-		return result;
+        /*Restful风格*/
+        /*get 查询*/
+        @RequestMapping(value="/{userId}",method=RequestMethod.GET)
+        @ResponseBody
+        public Object getUser(@PathVariable String apiVersion, @PathVariable Long userId) {
+                List<User> list =service.getUser();
+                return list;
+        }
+        /*put 修改*/
+        @RequestMapping(value="User",method=RequestMethod.PUT,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object updateUser(String id ,String username) {
+                User u =new User();
+                u.setId(id);
+                u.setUsername(username);
+                int result =service.updateUser(u);
+                return result;
 
-	}
-	/*post 插入*/
-	@RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
-	@ResponseBody
-	public Object insertUser(String id ,String username,String password) {
-		User u =new User();
-		u.setId(id);
-		u.setUsername(username);
-		u.setPasword(password);
-		int result =service.insertUser(u);
-		return result;
+        }
+        /*post 插入*/
+        @RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object insertUser(String id ,String username,String password) {
+                User u =new User();
+                u.setId(id);
+                u.setUsername(username);
+                u.setPasword(password);
+                int result =service.insertUser(u);
+                return result;
 
-	}
-	/*post 插入*/
-	@RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
-	@ResponseBody
-	public Object deleteUser(String id ) {
-		User u =new User();
-		u.setId(id);
-		int result =service.deleteUser(u);
-		return result;
+        }
+        /*post 插入*/
+        @RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object deleteUser(String id ) {
+                User u =new User();
+                u.setId(id);
+                int result =service.deleteUser(u);
+                return result;
 
-	}
-	
+        }
+
 }
