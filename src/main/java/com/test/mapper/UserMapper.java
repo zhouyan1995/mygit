@@ -9,7 +9,7 @@ import com.test.model.User;
 @Mapper
 public interface UserMapper {
 
-     List<User> getUser (); 
+     User getUser (String id); 
      int updateUser(User user);
      int deleteUser(User user);
      int insertUser(User user);

@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@EnableAutoConfiguration //启动springboot中的自动配置项目
 @EnableTransactionManagement(proxyTargetClass = true)//开启事务管理的注解
 @ComponentScan(basePackages={"com.test"})//设置注入Controller Service
-public class TestAppcontion {
+public class TestApplication {
 		public static void main(String[] args) {
-			SpringApplication.run(TestAppcontion.class, args);
+			SpringApplication.run(TestApplication.class, args);
 			
 	}
 		

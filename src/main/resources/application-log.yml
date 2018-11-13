@@ -1,0 +1,7 @@
+#### logs ####
+logging: 
+  path: E:\\fw\logs\testBoot #配置日志文件路径
+  level: 
+    org.springframework: info
+    com.test: debug
+    

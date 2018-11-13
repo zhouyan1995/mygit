@@ -3,8 +3,8 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.mapper.UserMapper">
-<select id="getUser" resultType="com.test.model.User" >
-select * from user
+<select id="getUser" resultType="com.test.model.User" parameterType="String">
+select * from user where id=#{id}
 </select>
 <select id="updateUser" resultType="int" parameterType="User">
 update user set password=#{password} where id=#{id}
