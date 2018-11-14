@@ -27,6 +27,7 @@ import com.test.service.UserService;
 
 @Controller
 @RequestMapping("api/{apiVersion}/user/")
+<<<<<<< HEAD
 public class UserController extends BaseController{
 
 	
@@ -57,4 +58,57 @@ public class UserController extends BaseController{
 		return result;
 
 	}
+=======
+public class UserController {
+
+
+        private final Logger log = org.slf4j.LoggerFactory
+                        .getLogger(UserController.class);
+
+        @Autowired
+        UserService service;
+
+        /*Restful风格*/
+        /*get 查询*/
+        @RequestMapping(value="/{userId}",method=RequestMethod.GET)
+        @ResponseBody
+        public Object getUser(@PathVariable String apiVersion, @PathVariable Long userId) {
+                List<User> list =service.getUser();
+                return list;
+        }
+        /*put 修改*/
+        @RequestMapping(value="User",method=RequestMethod.PUT,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object updateUser(String id ,String username) {
+                User u =new User();
+                u.setId(id);
+                u.setUsername(username);
+                int result =service.updateUser(u);
+                return result;
+
+        }
+        /*post 插入*/
+        @RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object insertUser(String id ,String username,String password) {
+                User u =new User();
+                u.setId(id);
+                u.setUsername(username);
+                u.setPasword(password);
+                int result =service.insertUser(u);
+                return result;
+
+        }
+        /*post 插入*/
+        @RequestMapping(value="User",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+        @ResponseBody
+        public Object deleteUser(String id ) {
+                User u =new User();
+                u.setId(id);
+                int result =service.deleteUser(u);
+                return result;
+
+        }
+
+>>>>>>> 587c6ec05666b6b2b3f58e3840f3be3fb6a0c08f
 }
