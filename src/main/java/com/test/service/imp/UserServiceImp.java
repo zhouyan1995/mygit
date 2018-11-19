@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.test.common.exception.BusinessException;
+import com.test.common.exception.BaseException;
+import com.test.common.exception.UserNotExistsException;
 import com.test.mapper.UserMapper;
 import com.test.model.User;
 import com.test.service.UserService;
@@ -22,7 +23,7 @@ public class UserServiceImp implements UserService {
 	public User getUser(String id) {
 		User user =mapper.getUser(id);
 		if (user ==null){
-			throw new BusinessException("2211100001"); //用户不存在
+			throw new UserNotExistsException(); //用户不存在
 		}
 		return mapper.getUser(id);
 	}
@@ -30,22 +31,12 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public int updateUser(User user) {
-		
-		return mapper.updateUser(user);
+		int count =mapper.updateUser(user);
+		if(count >0){
+			throw new BaseException("000"); //处理成功
+		}
+		return count;
 	}
-
-
-	@Override
-	public int deleteUser(User user) {
-		
-		return mapper.deleteUser(user);
-	}
-
-
-	@Override
-	public int insertUser(User user) {
-		
-		return mapper.insertUser(user);
-	}
+	
 
 }

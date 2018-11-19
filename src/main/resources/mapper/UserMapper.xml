@@ -6,10 +6,10 @@
 <select id="getUser" resultType="com.test.model.User" parameterType="String">
 select * from user where id=#{id}
 </select>
-<select id="updateUser" resultType="int" parameterType="User">
+<select id="updateUser" resultType="int" parameterType="com.test.model.User">
 update user set password=#{password} where id=#{id}
 </select>
-<select id="insertUser" resultType="int" parameterType="User">
+<select id="insertUser" resultType="int" parameterType="com.test.model.User">
 insert into user (id,username,password) values (#{id},#{username},#{password})
 </select>
 <select id="deleteUser" resultType="int" parameterType="User">

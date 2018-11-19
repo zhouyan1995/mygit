@@ -7,23 +7,28 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BusinessException extends RuntimeException {
+public  class BaseException extends RuntimeException {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BaseController.class);
 
 	private String code = StringUtils.EMPTY;
 	private String message = StringUtils.EMPTY;
 
-	public BusinessException(String code, String message) {
+	public BaseException() {
+        this.code = "400";
+        this.message = "处理失败";
+    }
+	
+	public BaseException(String code, String message) {
 		super(message);
 		this.code = code;
 		this.message = message;
 	}
 
-	public BusinessException(Exception e) {
+	public BaseException(Exception e) {
 		super(e);
-		if (e instanceof BusinessException) {
-			this.code = ((BusinessException) e).getCode();
+		if (e instanceof BaseException) {
+			this.code = ((BaseException) e).getCode();
 			this.message = e.getMessage();
 		}
 	}
@@ -31,7 +36,7 @@ public class BusinessException extends RuntimeException {
 	/**
 	 * 根据错误编码抛出业务异常
 	 */
-	public BusinessException(String code) {
+	public BaseException(String code) {
 		this(code, ErrorCodeProperties.init().getErrorMessage(code));
 	}
 
