@@ -2,6 +2,8 @@ package com.test.service.imp;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,7 @@ import com.test.service.UserService;
 public class UserServiceImp implements UserService {
 
 		@Autowired
-		UserMapper mapper;
+		private UserMapper mapper;
 	
 
 	@Override
@@ -31,9 +33,29 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public int updateUser(User user) {
-		int count =mapper.updateUser(user);
-		if(count >0){
-			throw new BaseException("000"); //处理成功
+		int count =this.mapper.updateUser(user);
+		if(count <=0){
+			throw new BaseException();//处理失败
+		}
+		return count;
+	}
+
+
+	@Override
+	public int insertUser(User user) {
+		int count =this.mapper.insertUser(user);
+		if(count <=0){
+			throw new BaseException(); //处理失败
+		}
+		return count;
+	}
+
+
+	@Override
+	public int deleteUser(String id) {
+		int count =this.mapper.deleteUser(id);
+		if(count <=0){
+			throw new BaseException("000"); //处理失败
 		}
 		return count;
 	}

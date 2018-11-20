@@ -4,15 +4,15 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.mapper.UserMapper">
 <select id="getUser" resultType="com.test.model.User" parameterType="String">
-select * from user where id=#{id}
+select username,password from user where id=#{id}
 </select>
-<select id="updateUser" resultType="int" parameterType="com.test.model.User">
+<update id="updateUser"  parameterType="user">
 update user set password=#{password} where id=#{id}
-</select>
-<select id="insertUser" resultType="int" parameterType="com.test.model.User">
+</update>
+<insert id="insertUser"  >
 insert into user (id,username,password) values (#{id},#{username},#{password})
-</select>
-<select id="deleteUser" resultType="int" parameterType="User">
+</insert>
+<delete id="deleteUser"  >
 delete from user where id=#{id}
-</select>
+</delete>
 </mapper>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +34,7 @@ public class UserController extends BaseController{
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
 	@Autowired
-	UserService service;
+	private UserService service;
 	
 	/*Restful风格*/
 	/*get 查询*/
@@ -42,21 +43,39 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public ResponseEntity<String> getUser(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {
-			
-			Map<String,Object> map =new HashMap<String, Object>();
-			User user =service.getUser(id);
-			User user1 =service.getUser(id);
-			map.put("user", user);
-			map.put("user1", user1);			
-		return response("data",map);
+		int a =1/0;
+		a =0/1;
+		User user =service.getUser(id);				
+		return response("data",user);
 
 	}
+	/*put 修改*/
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<String> updateUser(@PathVariable String apiVersion, @PathVariable String id ,
+	public ResponseEntity<String> updateUser(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
+		  
+			this.service.updateUser(user);
+		    return response("result","处理成功");
+	}
+	
+	/*post 插入*/
+	@RequestMapping(value="/",method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<String> insertUser(@PathVariable String apiVersion ,
+			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
+		  	System.out.println(user.getGmtCreate()+"date");
+			int retNumber = service.insertUser(user);
+		    return response("data",retNumber);
+	}
+	
+	/*delete 删除*/
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity<String> deleteUser(@PathVariable String apiVersion, @PathVariable String id ,
+			HttpServletResponse response, HttpServletRequest request) {
 		   
-			int retNumber = service.updateUser(user);
+			int retNumber = service.deleteUser(id);
 		    return response("data",retNumber);
 	}
 }

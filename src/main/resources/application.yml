@@ -29,5 +29,8 @@ spring:
 mybatis:
   typeAliasesPackage: com.test.model
   mapper-locations: classpath*:mapper/*.xml
+  configuration: 
+    interceptors: com.chrhc.mybatis.locker.interceptor.OptimisticLocker
+      
 #:后面要空一格
 
