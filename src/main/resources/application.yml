@@ -6,11 +6,7 @@ server:
 spring:
   profiles: 
     include: db #引入其他的.yml文件
-  datasource:
-    #url: jdbc:mysql://192.168.10.12:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
-    #username: yanfa
-    #password: 123456
-    #driver-class-name: com.mysql.jdbc.Driver
+  datasource: 
     type: com.alibaba.druid.pool.DruidDataSource
     maxActive: 20 #最大连接池数量
     initialSize: 1 #初始化连接数

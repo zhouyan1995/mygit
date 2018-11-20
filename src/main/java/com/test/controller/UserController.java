@@ -43,10 +43,9 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public ResponseEntity<String> getUser(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {
-		int a =1/0;
-		a =0/1;
-		User user =service.getUser(id);				
-		return response("data",user);
+		
+			User user =service.getUser(id);				
+			return response("data",user);
 
 	}
 	/*put 修改*/
@@ -64,18 +63,18 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public ResponseEntity<String> insertUser(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
-		  	System.out.println(user.getGmtCreate()+"date");
-			int retNumber = service.insertUser(user);
-		    return response("data",retNumber);
+		  	
+			this.service.insertUser(user);
+		    return response("result","处理成功");
 	}
 	
 	/*delete 删除*/
-	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<String> deleteUser(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {
 		   
-			int retNumber = service.deleteUser(id);
-		    return response("data",retNumber);
+		    this.service.deleteUser(id);
+		    return response("data","处理成功");
 	}
 }

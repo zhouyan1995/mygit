@@ -55,7 +55,7 @@ public class UserServiceImp implements UserService {
 	public int deleteUser(String id) {
 		int count =this.mapper.deleteUser(id);
 		if(count <=0){
-			throw new BaseException("000"); //处理失败
+			throw new BaseException(); //处理失败
 		}
 		return count;
 	}

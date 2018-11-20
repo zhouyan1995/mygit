@@ -43,9 +43,7 @@ public abstract class BaseController {
         	BaseException baseException = (BaseException) e;
             responseVo.setCode(baseException.getCode());
             message = e.getMessage();
-           /* if (baseException.getAttrs() != null) {
-                responseVo.setAttrs(baseException.getAttrs());
-            }*/
+           
         }
         responseVo.setMessage(message);
         String body = JSON.toJSONStringWithDateFormat(responseVo, "yyyy-MM-dd HH:mm:ss", SerializerFeature.DisableCircularReferenceDetect);

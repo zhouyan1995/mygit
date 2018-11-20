@@ -32,7 +32,7 @@ public abstract class BaseEntity implements Serializable {
     public BaseEntity() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         setGmtCreate(now);
-        setIsDeleted(DeletedState.NonDeleted);
+        setIsDeleted(DeletedState.N);
     }
 
     @PrePersist
@@ -40,7 +40,7 @@ public abstract class BaseEntity implements Serializable {
         if (gmtCreate == null) {
             Timestamp now = new Timestamp(System.currentTimeMillis());
             setGmtCreate(now);
-            setIsDeleted(DeletedState.NonDeleted);
+            setIsDeleted(DeletedState.N);
         }
     }
 

@@ -6,13 +6,17 @@
 <select id="getUser" resultType="com.test.model.User" parameterType="String">
 select username,password from user where id=#{id}
 </select>
+
 <update id="updateUser"  parameterType="user">
 update user set password=#{password} where id=#{id}
 </update>
+
 <insert id="insertUser"  >
 insert into user (id,username,password) values (#{id},#{username},#{password})
 </insert>
-<delete id="deleteUser"  >
-delete from user where id=#{id}
-</delete>
+
+<update id="deleteUser"  parameterType="user">
+update user set isDeleted='Y' where id=#{id}
+</update>
+
 </mapper>
