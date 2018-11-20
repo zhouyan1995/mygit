@@ -16,16 +16,16 @@ import com.alibaba.fastjson.annotation.JSONField;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
     @Column(name = "GMT_CREATE")
-    private Timestamp    gmtCreate;
+    private Timestamp    gmtCreate;//创建时间
     @Column(name = "GMT_MODIFY")
     @JSONField(serialize = false)
-    private Timestamp    gmtModify;
+    private Timestamp    gmtModify;//修改时间
     @Column(name = "IS_DELETED")
     @Enumerated(EnumType.STRING)
     @JSONField(serialize = false)
-    private DeletedState isDeleted;
+    private DeletedState isDeleted;//删除状态
     @Column(name = "VERSION")
-    @JSONField(serialize = false)
+    @JSONField(serialize = false)//版本号 （目前不用）
     @Version
     private long         version;
 

@@ -38,12 +38,10 @@ public abstract class BaseController {
         BaseResponseVo responseVo = new BaseResponseVo();
         responseVo.setCode("400");
         String message = "请求失败,请稍后重试";
-        System.out.println(e.toString()+"11111111111111");
         if (e instanceof BaseException) {
         	BaseException baseException = (BaseException) e;
             responseVo.setCode(baseException.getCode());
             message = e.getMessage();
-           
         }
         responseVo.setMessage(message);
         String body = JSON.toJSONStringWithDateFormat(responseVo, "yyyy-MM-dd HH:mm:ss", SerializerFeature.DisableCircularReferenceDetect);
@@ -57,20 +55,17 @@ public abstract class BaseController {
 	protected ResponseEntity<String> responseStr(String body) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Content-Type", "application/json; charset=UTF-8");
-        System.out.println("body"+body);
         return new ResponseEntity<String>(body, headers, HttpStatus.OK);
     }
 	protected ResponseEntity<String> response(String key, Object resp) {
         Map<String, Object> respMap = new HashMap<String, Object>();
         respMap.put(key, resp);
-        System.out.println("key"+key);
         return response(respMap);
     }
 	protected ResponseEntity<String> response(Object resp) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         String json = JSON.toJSONStringWithDateFormat(resp, "yyyy-MM-dd HH:mm:ss", SerializerFeature.DisableCircularReferenceDetect);
-        System.out.println(json+"json");
         return new ResponseEntity<String>(json, headers, HttpStatus.OK);
     }
 }

@@ -49,7 +49,7 @@ public class UserController extends BaseController{
 
 	}
 	/*put 修改*/
-	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
+	@RequestMapping(value="/put/{id}",method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<String> updateUser(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
@@ -59,7 +59,7 @@ public class UserController extends BaseController{
 	}
 	
 	/*post 插入*/
-	@RequestMapping(value="/",method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> insertUser(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
@@ -69,7 +69,7 @@ public class UserController extends BaseController{
 	}
 	
 	/*delete 删除*/
-	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
+	@RequestMapping(value="/delete/{id}",method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<String> deleteUser(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {

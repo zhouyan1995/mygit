@@ -12,7 +12,7 @@ update user set password=#{password} where id=#{id}
 </update>
 
 <insert id="insertUser"  >
-insert into user (id,username,password) values (#{id},#{username},#{password})
+insert into user (id,username,password,gmtCreate) values (#{id},#{username},#{password},#{gmtCreate})
 </insert>
 
 <update id="deleteUser"  parameterType="user">
