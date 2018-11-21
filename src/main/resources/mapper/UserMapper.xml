@@ -3,11 +3,11 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.mapper.UserMapper">
-<select id="getUser" resultType="com.test.model.User" parameterType="String">
+<select id="getUserById" resultType="com.test.model.User" parameterType="String">
 select username,password from user where id=#{id}
 </select>
 
-<update id="updateUser"  parameterType="user">
+<update id="updateUserById"  parameterType="user">
 update user set password=#{password} where id=#{id}
 </update>
 
@@ -15,8 +15,15 @@ update user set password=#{password} where id=#{id}
 insert into user (id,username,password,gmtCreate) values (#{id},#{username},#{password},#{gmtCreate})
 </insert>
 
-<update id="deleteUser"  parameterType="user">
+<update id="deleteUserById"  parameterType="user">
 update user set isDeleted='Y' where id=#{id}
 </update>
 
+<select id="getUser" resultType="com.test.model.User" >
+select username,password from user 
+</select>
+
+<select id="getUserCount" resultType="int">
+select count(*) from user 
+</select>
 </mapper>

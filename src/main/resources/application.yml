@@ -30,3 +30,9 @@ mybatis:
       
 #:后面要空一格
 
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.test.common.exception.BaseException;
 import com.test.common.exception.UserNotExistsException;
 import com.test.mapper.UserMapper;
@@ -18,22 +19,22 @@ import com.test.service.UserService;
 public class UserServiceImp implements UserService {
 
 		@Autowired
-		private UserMapper mapper;
+		private UserMapper userMapper;
 	
 
 	@Override
-	public User getUser(String id) {
-		User user =mapper.getUser(id);
+	public User getUserById(String id) {
+		User user =userMapper.getUserById(id);
 		if (user ==null){
 			throw new UserNotExistsException(); //用户不存在
 		}
-		return mapper.getUser(id);
+		return userMapper.getUserById(id);
 	}
 
 
 	@Override
-	public int updateUser(User user) {
-		int count =this.mapper.updateUser(user);
+	public int updateUserById(User user) {
+		int count =this.userMapper.updateUserById(user);
 		if(count <=0){
 			throw new BaseException();//处理失败
 		}
@@ -43,7 +44,7 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public int insertUser(User user) {
-		int count =this.mapper.insertUser(user);
+		int count =this.userMapper.insertUser(user);
 		if(count <=0){
 			throw new BaseException(); //处理失败
 		}
@@ -52,12 +53,30 @@ public class UserServiceImp implements UserService {
 
 
 	@Override
-	public int deleteUser(String id) {
-		int count =this.mapper.deleteUser(id);
+	public int deleteUserById(String id) {
+		int count =this.userMapper.deleteUserById(id);
 		if(count <=0){
 			throw new BaseException(); //处理失败
 		}
 		return count;
+	}
+
+
+	
+
+
+	@Override
+	public List<User> getUser(int pageNum, int pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<User> listUser=userMapper.getUser();
+		return listUser;
+	}
+
+
+	@Override
+	public int getUserCount() {
+		
+		return userMapper.getUserCount();
 	}
 	
 

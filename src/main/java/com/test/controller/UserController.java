@@ -34,27 +34,27 @@ public class UserController extends BaseController{
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
 	@Autowired
-	private UserService service;
+	private UserService userService;
 	
 	/*Restful风格*/
 	/*get 查询*/
 	/*apiVersion  版本号*/
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<String> getUser(@PathVariable String apiVersion, @PathVariable String id ,
+	public ResponseEntity<String> getUserById(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {
 		
-			User user =service.getUser(id);				
+			User user =userService.getUserById(id);
 			return response("data",user);
 
 	}
 	/*put 修改*/
 	@RequestMapping(value="/put/{id}",method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<String> updateUser(@PathVariable String apiVersion ,
+	public ResponseEntity<String> updateUserById(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
-		  
-			this.service.updateUser(user);
+		
+			this.userService.updateUserById(user);
 		    return response("result","处理成功");
 	}
 	
@@ -64,17 +64,33 @@ public class UserController extends BaseController{
 	public ResponseEntity<String> insertUser(@PathVariable String apiVersion ,
 			HttpServletResponse response, HttpServletRequest request,@RequestBody User user) {
 		  	
-			this.service.insertUser(user);
+			this.userService.insertUser(user);
 		    return response("result","处理成功");
 	}
 	
 	/*delete 删除*/
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<String> deleteUser(@PathVariable String apiVersion, @PathVariable String id ,
+	public ResponseEntity<String> deleteUserById(@PathVariable String apiVersion, @PathVariable String id ,
 			HttpServletResponse response, HttpServletRequest request) {
 		   
-		    this.service.deleteUser(id);
+		    this.userService.deleteUserById(id);
 		    return response("data","处理成功");
+	}
+	
+	@RequestMapping(value="/list/{pageNum}/{pageSize}",method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<String> getUser(@PathVariable String apiVersion, @PathVariable Integer pageNum ,
+			@PathVariable Integer pageSize ,HttpServletResponse response, HttpServletRequest request) {
+			Map<String, Object> respMap = new HashMap<String, Object>();
+			/*数据*/
+			List<User> listUser =userService.getUser(pageNum,pageSize);
+			/*总页数*/
+			int pageCount=userService.getUserCount();
+			
+			respMap.put("userService", listUser);
+			respMap.put("pageCount", pageCount);
+			return response("data",respMap);
+
 	}
 }
