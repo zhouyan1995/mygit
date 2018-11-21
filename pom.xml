@@ -25,9 +25,15 @@
 		<dependency> 
 			<groupId>com.github.pagehelper</groupId> 
 			<artifactId>pagehelper-spring-boot-starter</artifactId> 
-		<!-- 特别注意版本问题, 看到评论以后得以纠正 --> 
-			<version>1.1.2</version> 
-		</dependency>
+		<!-- 特别注意版本问题 --> 
+			<version>1.1.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-spring-boot-starter</artifactId>
+                    <groupId>org.mybatis.spring.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<!--对jsp支持 -->
 		<dependency>
@@ -104,7 +110,13 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.2</version>
-		</dependency>
+            <exclusions>
+                <exclusion>
+                    <artifactId>httpcore</artifactId>
+                    <groupId>org.apache.httpcomponents</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
