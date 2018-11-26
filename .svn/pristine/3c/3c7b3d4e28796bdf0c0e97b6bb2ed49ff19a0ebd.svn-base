@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fineway.coal.mapper.Coal_Dao">
+
+<select id="getselect" resultType="map" parameterType="map">
+
+ SELECT * FROM   ( SELECT A.*, ROWNUM RN   
+FROM (SELECT * FROM MTHC where HCISNEW='1' 
+<if test="PARENTID!=null and PARENTID!=''">
+and PARENTID=#{PARENTID}
+</if>
+<if test="time!=null and time!=''">
+and REPORTTIME =#{time}
+</if>
+<if test="company_name!=null and company_name!=''">
+and QYMC like '%'||#{company_name}||'%'
+</if>
+
+ORDER BY CREATETIME DESC) A   
+)  
+WHERE RN > #{small_number} and RN &lt;= #{big_number}
+
+
+</select>
+
+<select id="get_page" resultType="int" parameterType="map">
+select count(*) from MTHC  
+where HCISNEW='1' 
+<if test="PARENTID!=null and PARENTID!=''">
+and PARENTID=#{PARENTID}
+</if>
+<if test="time!=null and time!=''">
+and REPORTTIME =#{time}
+</if>
+<if test="company_name!=null and company_name!=''">
+and QYMC like '%'||#{company_name}||'%'
+</if>
+</select>
+
+
+
+<select id="select_name" parameterType="java.lang.String" resultType="int">
+select count(*) from MTHC where QYMC=#{company_name}
+</select>
+
+<insert id="getinsert" parameterType="map">
+	INSERT
+	INTO MTHC
+	(
+	CIVILREGIONALISMID,
+	QYMC,
+	XYDM,
+	TCMKMC,
+	MKSZD,
+	HDNL,
+	TCSJ,
+	SFFB,
+	SFYS,
+	REPORTTIME,
+	TCHSFGS,
+	SFSBBJLXH,
+	SFSC,
+	CKXKZH,
+	SFZXCKXKZ,
+	CKXKZZXSJ,
+	CKXKZZXSFGG,
+	AQSCXKZH,
+	SFZXAQSCXKZ,
+	AQSCXKZZXSJ,
+	AQSCXKZZXSFGG,
+	HZWJH,
+	SFCXHZWJ,
+	HZWJCXSJ,
+	HZWJSFGG,
+	SFSZHFA,
+	SFRQTC,
+	SFLQCZJJ,
+	HCSTATE,
+	PARENTID,
+	HCISNEW
+	)
+	VALUES
+	(
+
+	#{CIVILREGIONALISMID,jdbcType=VARCHAR},
+	#{QYMC,jdbcType=VARCHAR},
+	#{XYDM,jdbcType=VARCHAR},
+	#{TCMKMC,jdbcType=VARCHAR},
+	#{MKSZD,jdbcType=VARCHAR},
+	#{HDNL,jdbcType=VARCHAR},
+	#{TCSJ,jdbcType=VARCHAR},
+	#{SFFB,jdbcType=VARCHAR},
+	#{SFYS,jdbcType=VARCHAR},
+	#{REPORTTIME,jdbcType=VARCHAR},
+	#{TCHSFGS,jdbcType=VARCHAR},
+	#{SFSBBJLXH,jdbcType=VARCHAR},
+    #{SFSC,jdbcType=VARCHAR},
+	#{CKXKZH,jdbcType=VARCHAR},
+	#{SFZXCKXKZ,jdbcType=VARCHAR},
+	#{CKXKZZXSJ,jdbcType=VARCHAR},
+	#{CKXKZZXSFGG,jdbcType=VARCHAR},
+	#{AQSCXKZH,jdbcType=VARCHAR},
+	#{SFZXAQSCXKZ,jdbcType=VARCHAR},
+	#{AQSCXKZZXSJ,jdbcType=VARCHAR},
+	#{AQSCXKZZXSFGG,jdbcType=VARCHAR},
+	#{HZWJH,jdbcType=VARCHAR},
+	#{SFCXHZWJ,jdbcType=VARCHAR},
+	#{HZWJCXSJ,jdbcType=VARCHAR},
+	#{HZWJSFGG,jdbcType=VARCHAR},
+	#{SFSZHFA,jdbcType=VARCHAR},
+	#{SFRQTC,jdbcType=VARCHAR},
+	#{SFLQCZJJ,jdbcType=VARCHAR},
+	'1',
+	#{PARENTID,jdbcType=VARCHAR},
+	'1'
+	)
+</insert>
+<update id="update" parameterType="map">
+update MTHC set  HCISNEW='0'  where QYMC=#{QYMC,jdbcType=VARCHAR} and REPORTTIME = #{REPORTTIME,jdbcType=VARCHAR}
+</update>
+
+<!--ID不为空时  -->
+<insert id="getinsert_id" parameterType="map">
+	INSERT
+	INTO MTHC
+	(
+	MTHC,
+	CIVILREGIONALISMID,
+	QYMC,
+	XYDM,
+	TCMKMC,
+	MKSZD,
+	HDNL,
+	TCSJ,
+	SFFB,
+	SFYS,
+	REPORTTIME,
+	TCHSFGS,
+	SFSBBJLXH,
+	SFSC,
+	CKXKZH,
+	SFZXCKXKZ,
+	CKXKZZXSJ,
+	CKXKZZXSFGG,
+	AQSCXKZH,
+	SFZXAQSCXKZ,
+	AQSCXKZZXSJ,
+	AQSCXKZZXSFGG,
+	HZWJH,
+	SFCXHZWJ,
+	HZWJCXSJ,
+	HZWJSFGG,
+	SFSZHFA,
+	SFRQTC,
+	SFLQCZJJ,
+	HCSTATE,
+	PARENTID,
+	HCISNEW
+	)
+	VALUES
+	(
+    #{MTHC,jdbcType=VARCHAR},
+	#{CIVILREGIONALISMID,jdbcType=VARCHAR},
+	#{QYMC,jdbcType=VARCHAR},
+	#{XYDM,jdbcType=VARCHAR},
+	#{TCMKMC,jdbcType=VARCHAR},
+	#{MKSZD,jdbcType=VARCHAR},
+	#{HDNL,jdbcType=VARCHAR},
+	#{TCSJ,jdbcType=VARCHAR},
+	#{SFFB,jdbcType=VARCHAR},
+	#{SFYS,jdbcType=VARCHAR},
+	#{REPORTTIME,jdbcType=VARCHAR},
+	#{TCHSFGS,jdbcType=VARCHAR},
+	#{SFSBBJLXH,jdbcType=VARCHAR},
+    #{SFSC,jdbcType=VARCHAR},
+	#{CKXKZH,jdbcType=VARCHAR},
+	#{SFZXCKXKZ,jdbcType=VARCHAR},
+	#{CKXKZZXSJ,jdbcType=VARCHAR},
+	#{CKXKZZXSFGG,jdbcType=VARCHAR},
+	#{AQSCXKZH,jdbcType=VARCHAR},
+	#{SFZXAQSCXKZ,jdbcType=VARCHAR},
+	#{AQSCXKZZXSJ,jdbcType=VARCHAR},
+	#{AQSCXKZZXSFGG,jdbcType=VARCHAR},
+	#{HZWJH,jdbcType=VARCHAR},
+	#{SFCXHZWJ,jdbcType=VARCHAR},
+	#{HZWJCXSJ,jdbcType=VARCHAR},
+	#{HZWJSFGG,jdbcType=VARCHAR},
+	#{SFSZHFA,jdbcType=VARCHAR},
+	#{SFRQTC,jdbcType=VARCHAR},
+	#{SFLQCZJJ,jdbcType=VARCHAR},
+	'1',
+	#{PARENTID,jdbcType=VARCHAR},
+	'1'
+	)
+</insert>
+</mapper>

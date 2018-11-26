@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fineway.coal.mapper.Coal_Dao">
+
+<select id="getselect" resultType="map" parameterType="map">
+SELECT *  FROM (SELECT ROWNUM AS rowno, t.* FROM MTHC t where HCISNEW='1' 
+<if test="PARENTID!=null and PARENTID!=''">
+and PARENTID=#{PARENTID}
+</if>
+<if test="time!=null and time!=''">
+and t.REPORTTIME =#{time}
+</if>
+<if test="company_name!=null and company_name!=''">
+and t.QYMC like '%'||#{company_name}||'%'
+</if>
+ ) table_alias
+ WHERE table_alias.rowno >#{small_number} and table_alias.rowno&lt;=#{big_number} 
+</select>
+
+<select id="get_page" resultType="int" parameterType="map">
+select count(*) from MTHC  
+where HCISNEW='1' 
+<if test="PARENTID!=null and PARENTID!=''">
+and PARENTID=#{PARENTID}
+</if>
+<if test="time!=null and time!=''">
+and REPORTTIME =#{time}
+</if>
+<if test="company_name!=null and company_name!=''">
+and QYMC like '%'||#{company_name}||'%'
+</if>
+</select>
+
+
+
+<select id="select_name" parameterType="java.lang.String" resultType="int">
+select count(*) from MTHC where QYMC=#{company_name}
+</select>
+
+<insert id="getinsert" parameterType="map">
+INSERT
+INTO MTHC
+  (
+ 
+    CIVILREGIONALISMID,
+    QYMC,
+    XYDM,
+    TCMKMC,
+    HDNL,
+    TQTY,
+    YFJCHT,
+    NBAZ,
+    QT,
+    SFTC,
+    SFHC,
+    SFFB,
+    SFZX,
+    SFYS,
+    REPORTTIME,
+    TCHSFGS,
+    TCQSFGG,
+    SFSBBJLXH,
+    SFSC,
+    SFZXXKZ,
+    SFZXAQSCXKZ,
+    SFZXMTSCXKZ,
+    SFZXYYZZ,
+    ZZZXSFGG,
+    SFSZHFA,
+    SFRQTC,
+    SFLQCZJJ,
+    SFCJCNH,
+    SFCNZBDW,
+    HCSTATE,
+
+    PARENTID,
+    HCISNEW
+  )
+  VALUES
+  (
+    #{CIVILREGIONALISMID,jdbcType=VARCHAR},
+    #{QYMC,jdbcType=VARCHAR},
+    #{XYDM,jdbcType=VARCHAR},
+    #{TCMKMC,jdbcType=VARCHAR},
+    #{HDNL,jdbcType=VARCHAR},
+    #{TQTY,jdbcType=NUMERIC},
+    #{YFJCHT,jdbcType=NUMERIC},
+    #{NBAZ,jdbcType=NUMERIC},
+    #{QT,jdbcType=NUMERIC},
+    #{SFTC,jdbcType=VARCHAR},
+    #{SFHC,jdbcType=VARCHAR},
+    #{SFFB,jdbcType=VARCHAR},
+    #{SFZX,jdbcType=VARCHAR},
+    #{SFYS,jdbcType=VARCHAR},
+    #{REPORTTIME,jdbcType=VARCHAR},
+    #{TCHSFGS,jdbcType=VARCHAR},
+    #{TCQSFGG,jdbcType=VARCHAR},
+    #{SFSBBJLXH,jdbcType=VARCHAR},
+    #{SFSC,jdbcType=VARCHAR},
+    #{SFZXXKZ,jdbcType=VARCHAR},
+    #{SFZXAQSCXKZ,jdbcType=VARCHAR},
+    #{SFZXMTSCXKZ,jdbcType=VARCHAR},
+    #{SFZXYYZZ,jdbcType=VARCHAR},
+    #{ZZZXSFGG,jdbcType=VARCHAR},
+    #{SFSZHFA,jdbcType=VARCHAR},
+    #{SFRQTC,jdbcType=VARCHAR},
+    #{SFLQCZJJ,jdbcType=VARCHAR},
+    #{SFCJCNH,jdbcType=VARCHAR},
+    #{SFCNZBDW,jdbcType=VARCHAR},
+    #{HCSTATE,jdbcType=VARCHAR},
+
+    #{PARENTID,jdbcType=VARCHAR},
+    '1'
+  )
+</insert>
+<update id="update">
+update MTHC set  HCISNEW='0' where MTHC=#{mthbzbid}
+</update>
+
+</mapper>

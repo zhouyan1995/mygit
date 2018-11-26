@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Strict//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+<title>元数据服务器操作测试</title>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript">
+
+	function jsonpHandler() {
+		$("#capResponse").val("");
+// 		alert($("#capRequest").val());
+		$.ajax({
+			type : "post",
+// 			async:false,
+ 			dataType : "json",
+//			dataType : "jsonp",
+			url : $('#urlCap').val(),
+			data : $("#capRequest").val(),
+ 			jsonp: "callback",
+			contentType : "application/json; charset=utf-8",
+			jsonpCallback:"?",
+			success : function(data, status, response) {
+// 				$("#capResponse").val(data);
+				console.log(data);
+				$("#capResponse").val(response.responseText)
+			},
+			error : function(x, e) {
+				alert(x.responseText);
+				console.log(x.responseText);
+				$("#capResponse").val(x.responseText)
+			}
+		});
+	}
+</script>
+</head>
+<body>
+<body>
+	<div>
+		<div style="font-size: 25px; height: 50px;">元数据服务器利用CORS跨域访问Rest服务测试</div>
+		<div>
+			<span style="vertical-align: middle;">请求地址：</span> <input id="urlCap" type="text" style="width: 502px;" /><input
+				id="btnCap" type="button" value="执行测试" style="margin-left: 10px;" onclick="jsonpHandler()" />
+		</div>
+		<div>
+			<span style="vertical-align: top;">请求内容：</span>
+			<textarea id="capRequest" style="width: 500px; height: 200px;">{}</textarea>
+		</div>
+		<div>
+			<span style="vertical-align: top;">响应内容：</span>
+			<textarea id="capResponse" style="width: 500px; height: 200px;"></textarea>
+		</div>
+	</div>
+</body>
+</body>
+</html>

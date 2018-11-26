@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fineway.gthbtable.mapper.GtHbTableMapper">
+<!-- 分页时间条件查询钢铁信息 -->
+<select id="getGtList"  resultType="GtHbTable">
+<![CDATA[	
+
+select a.* from(
+select t.*,rownum rn  from 
+GTHC t
+
+where REPORTTIME=#{REPORTTIME,jdbcType=VARCHAR} and PARENTID =#{PARENTID,jdbcType=VARCHAR} and  HCISNEW=1
+order by CREATETIME desc
+)a
+where rn BETWEEN #{currentPage,jdbcType=NUMERIC} AND #{pageSize,jdbcType=NUMERIC}
+
+
+	]]> 
+</select>
+
+<!-- 分页查询钢铁信息 -->
+<select id="getGTAll"  resultType="GtHbTable">
+<![CDATA[	
+
+select a.* from(
+select t.*,rownum rn  from 
+GTHC t  where  HCISNEW=1 and PARENTID =#{PARENTID,jdbcType=VARCHAR}
+order by CREATETIME desc
+)a
+where rn BETWEEN #{currentPage,jdbcType=NUMERIC} AND #{pageSize,jdbcType=NUMERIC}
+
+
+	]]> 
+
+</select>
+
+<!-- 条件查询总条数 -->
+<select id="getGTCount" resultType="int">
+select count(*) from GTHC
+<where>
+<if test="REPORTTIME != null and REPORTTIME !=''">
+and REPORTTIME=#{REPORTTIME,jdbcType=VARCHAR}
+</if>
+<if test="QYMC != null and QYMC !=''">
+and instr(QYMC,#{QYMC,jdbcType=VARCHAR}) &gt; 0
+</if>
+and HCISNEW=1 and PARENTID =#{PARENTID,jdbcType=VARCHAR}
+</where>
+</select>
+<!-- 名称查询 -->
+<select id="getGTForName" resultType="GtHbTable">
+
+<![CDATA[	
+
+select a.* from(
+select t.*,rownum rn  from 
+GTHC t
+
+where instr(QYMC,#{QYMC,jdbcType=VARCHAR}) > 0 and HCISNEW=1 and PARENTID =#{PARENTID,jdbcType=VARCHAR}
+order by CREATETIME desc
+)a
+where rn BETWEEN #{currentPage,jdbcType=NUMERIC} AND #{pageSize,jdbcType=NUMERIC}
+
+
+	]]> 
+</select>
+
+<!-- 名称时间查询 -->
+<select id="getGTForNT" resultType="GtHbTable">
+<![CDATA[	
+
+select a.* from(
+select t.*,rownum rn  from 
+GTHC t
+where instr(QYMC,#{QYMC,jdbcType=VARCHAR}) > 0 and REPORTTIME=#{REPORTTIME,jdbcType=VARCHAR} and HCISNEW=1 and PARENTID =#{PARENTID,jdbcType=VARCHAR}
+order by CREATETIME desc
+)a
+where rn BETWEEN #{currentPage,jdbcType=NUMERIC} AND #{pageSize,jdbcType=NUMERIC}
+
+
+	]]> 
+
+</select>
+
+<!-- 插入钢铁信息 -->
+<insert id="insertGT" parameterType="GtHbTable" >
+	INSERT
+	INTO GTHC
+	(GTHCID,
+	CIVILREGIONALISMID,
+	QYMC,
+	XYDM,
+	LTTCZBJSL,
+	LTYWCYJCN,
+	LTSJTCSJ,
+	LTSFYS,
+	LTTCFS,
+	LGTCZBJSL,
+	LGYWCYJCN,
+	LGSJTCSJ,
+	LGSFYS,
+	LGTCFS,
+	QYSFZTTC,
+	TCHSFGS,
+	SFSBBJLXH,
+	SFSC,
+	SCXKZH,
+	SFZXXKZ,
+	SCXKZZXSJ,
+	PARENTID,
+	ZZZXSFGG,
+	HCSTATE,
+	HCISNEW,
+	REPORTTIME
+	)
+	VALUES
+	( 
+	#{gthcid,jdbcType=VARCHAR},
+	#{civilregionalismid,jdbcType=VARCHAR},
+	#{qymc,jdbcType=VARCHAR},
+	#{xydm,jdbcType=VARCHAR},
+	#{lttczbjsl,jdbcType=VARCHAR},
+	#{ltywcyjcn,jdbcType=NUMERIC},
+	#{ltsjtcsj,jdbcType=VARCHAR},
+	#{ltsfys,jdbcType=VARCHAR},
+	#{lttcfs,jdbcType=VARCHAR},
+	#{lgtczbjsl,jdbcType=VARCHAR},
+	#{lgywcyjcn,jdbcType=NUMERIC},
+	#{lgsjtcsj,jdbcType=VARCHAR},
+	#{lgsfys,jdbcType=VARCHAR},
+	#{lgtcfs,jdbcType=VARCHAR},
+	#{qysfzttc,jdbcType=VARCHAR},
+	#{tchsfgs,jdbcType=VARCHAR},
+	#{sfsbbjlxh,jdbcType=VARCHAR},
+	#{sfsc,jdbcType=VARCHAR},
+	#{scxkzh,jdbcType=VARCHAR},
+	#{sfzxxkz,jdbcType=VARCHAR},
+	#{scxkzzxsj,jdbcType=TIMESTAMP},
+	#{parentid,jdbcType=VARCHAR},
+	#{zzzxsfgg,jdbcType=VARCHAR},
+	#{hcstate,jdbcType=VARCHAR},
+	#{hcisnew,jdbcType=NUMERIC},
+	#{reporttime,jdbcType=VARCHAR}
+	)
+
+</insert>
+
+<!-- 查询企业名称 -->
+<select id="searchName" resultType="int" parameterType="String">
+select count(*) from GTHC where QYMC=#{QYMC,jdbcType=VARCHAR}
+</select>
+
+<!-- 更新状态 -->
+<update id="UpdateHCISNEW" >
+update GTHC set HCISNEW ='0' where QYMC=#{QYMC,jdbcType=VARCHAR} and  REPORTTIME =#{REPORTTIME,jdbcType=VARCHAR}
+
+</update>
+</mapper>
