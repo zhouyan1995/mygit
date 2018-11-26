@@ -130,19 +130,19 @@ public class ProductServiceImpl implements ProductServie {
 					//设置居中
 				    cellStyle6.setAlignment(CellStyle.ALIGN_CENTER);//水平居中  
 				    cellStyle6.setVerticalAlignment(CellStyle.VERTICAL_CENTER);//垂直居中  
-				  //设置居中
+				 	 //设置居中
 				    cellStyle5.setAlignment(CellStyle.ALIGN_CENTER);//水平居中  
 				    cellStyle5.setVerticalAlignment(CellStyle.VERTICAL_CENTER);//垂直居中
-				  //设置居中
+				 	 //设置居中
 				    cellStyle.setAlignment(CellStyle.ALIGN_CENTER);//水平居中  
 				    cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);//垂直居中
 				    
-				  //设置边框
+				 	 //设置边框
 				  	cellStyle7.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 				  	cellStyle7.setBorderLeft(HSSFCellStyle.BORDER_THIN);
 				  	cellStyle7.setBorderRight(HSSFCellStyle.BORDER_THIN);
 				  	cellStyle7.setBorderTop(HSSFCellStyle.BORDER_THIN);
-				  //设置居中
+				  	//设置居中
 				  	cellStyle7.setAlignment(CellStyle.ALIGN_CENTER);//水平居中  
 				  	cellStyle7.setVerticalAlignment(CellStyle.VERTICAL_CENTER);//垂直居中  
 				    //设置字体
@@ -362,13 +362,7 @@ public class ProductServiceImpl implements ProductServie {
 							int sz1=0;
 							int nz1=0;
 							int e1=0;
-							/*HSSFRow	 row4_0 = sheet.createRow(3); //地区
-							HSSFCell cell4_0 = row4_0.createCell(0);
-							HSSFRow	 row5_0 = sheet.createRow(4);
-							HSSFCell cell5_0 = row5_0.createCell(0);
-							cell4_0.setCellStyle(cellStyle); //居中 边框
-							cell5_0.setCellStyle(cellStyle); //居中 边框
-*/							for(int x =3 ;x<5;x++){
+								for(int x =3 ;x<5;x++){
 								HSSFRow	 row4 = sheet.createRow(x);
 								for(int c =0;c<=indexItemCodes.size();c++){
 									HSSFCell cell4_1 = row4.createCell(c); //人口

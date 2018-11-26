@@ -1,21 +1,14 @@
 package com.nndims.disaster.product.comm;
+import com.nndims.disaster.product.config.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-
 public class Utils {
-
+	@Autowired
+    Config config;
 	/**
 	 * serviceName：
 	 * serviceType：
@@ -407,10 +400,11 @@ public class Utils {
 		}
 		return insertlogpath; 
 	}
-	
+
 	public static void main(String[] args) {
-		SimpleDateFormat s =new SimpleDateFormat();
-		
+
+/*		SimpleDateFormat s =new SimpleDateFormat();
+
 		System.out.println(new Date().getTime());
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet();
@@ -423,10 +417,17 @@ public class Utils {
 				cell = row.createCell(j);
 				//cell.setCellStyle(cellStyleCenter);
 			}
-		}
+		}*/
+       // new Utils().test();
 		System.out.println("完成");
+
 		
 	}
+	public void test(){
+	    String s =config.getDataType();
+        System.out.println(s);
+
+    }
 	//获取省
 	public static List<String> getPro() {
 		List<String> list =new ArrayList();
@@ -465,4 +466,5 @@ public class Utils {
 		
 		return list;
 	}
+
 }
